@@ -6,6 +6,8 @@ from multiselectfield import MultiSelectField
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from users.models import TimeStamp
+from django_softdelete.models import SoftDeleteModel
+import reversion
 
 
 class TimeSlot(models.Model):
@@ -24,7 +26,8 @@ class TimeSlot(models.Model):
         return f'{self.time} {self.am_or_pm}'
 
 
-class Clinic(TimeStamp):
+@reversion.register()
+class Clinic(TimeStamp, SoftDeleteModel):
     SATURDAY = 'saturday'
     SUNDAY = 'sunday'
     MONDAY = 'monday'
@@ -48,9 +51,13 @@ class Clinic(TimeStamp):
     user = models.ManyToManyField(User, through="DoctorClinicTimeSlot")
 
 
-class DoctorClinicTimeSlot(TimeStamp):
+@reversion.register()
+class DoctorClinicTimeSlot(TimeStamp, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
     time_slot = models.ForeignKey(TimeSlot, on_delete=models.PROTECT)
     price = models.FloatField()
     is_reserved = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ['user', 'clinic', 'time_slot', 'is_deleted']

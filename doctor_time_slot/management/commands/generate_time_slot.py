@@ -6,7 +6,7 @@ from doctor_time_slot.models import TimeSlot
 
 
 class Command(BaseCommand):
-    help = 'check all scripts'
+    help = 'create time slots'
 
     def handle(self, *args, **options):
         for index in range(1, 13):
@@ -16,6 +16,4 @@ class Command(BaseCommand):
             except:
                 pass
 
-        logger = logging.getLogger()
-        logger.msg = "Done done time slot"
-        print("Done time slot")
+        print("Done time slot Creation")

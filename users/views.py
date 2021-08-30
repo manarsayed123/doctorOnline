@@ -15,6 +15,7 @@ class Registeration(CreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
+    """ for registeration you need also to add field role and its value patient or doctor"""
 
     def create(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
@@ -22,7 +23,10 @@ class Registeration(CreateAPIView):
             raise ValidationError("please add valid role")
 
         if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
+            user = User.objects.create(username=serializer.validated_data['username'],
+                                       email=serializer.validated_data['email'], is_active=True)
+
             user.set_password(request.data['password'])
+            user.save()
             Profile.objects.create(user=user, role=request.data.get('role', None))
             return Response(UserListSerializer(user).data)

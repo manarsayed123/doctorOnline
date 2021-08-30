@@ -10,7 +10,7 @@ class ClinicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Clinic
-        fields = '__all__'
+        exclude = ('deleted_at', 'is_deleted')
 
 
 class DoctorClinicTimeSlotSerializer(serializers.ModelSerializer):
@@ -18,4 +18,5 @@ class DoctorClinicTimeSlotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DoctorClinicTimeSlot
-        fields = '__all__'
+        exclude = ('deleted_at', 'is_deleted')
+

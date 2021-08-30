@@ -1,0 +1,43 @@
+{% extends 'admin/base.html' %}
+{% load i18n static jet_tags %}
+{% block html %}{{ block.super }}
+    <script src="{% url 'jet:jsi18n' %}"></script>
+    <style>
+        ul, li {
+            list-style-type: none !important;
+        }
+
+        .aligned ul label input[type="checkbox"] {
+            display: inherit !important;
+        }
+
+        .select2-container + .select2-container--admin-autocomplete {
+            min-width: 30% !important;
+        }
+        .admin-autocomplete + .select2-container--admin-autocomplete {
+            display: none !important;
+        }
+
+    </style>
+{% endblock %}
+
+{% block blockbots %}{{ block.super }}
+
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' as url %}{{ url|jet_append_version }}"
+            type="text/javascript"></script>
+
+    <script src="{% static 'admin/js/jquery.init.js' as url %}{{ url|jet_append_version }}"></script>
+        <script>
+        jet.jQuery(document).ready(function() {
+            setTimeout(function(){
+                try {
+                    if(jet.jQuery('select').data('select2')) {
+                        jet.jQuery('select').select2({theme: 'jet', width: 'auto'});
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },100)
+        });
+    </script>
+{% endblock %}
