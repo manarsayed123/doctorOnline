@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    "django_filters",
+
     ######apps############
     'users',
+    'doctor_time_slot',
+    'patient_reservation',
 ]
 
 MIDDLEWARE = [
